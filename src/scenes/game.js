@@ -2,11 +2,12 @@ import kplay from "../kaplayCtx";
 import { makeAfmirez } from "../entities/afmirez";
 import { makeRing } from "../entities/ring";
 import { Sounds } from "../constans/sounds";
-import { Fonts } from "../constans/fonts";
 import { makeRecruiterZombie } from "../entities/recruiter";
-import { Sprites } from "../constans/sprites";
 import { updateSceneConfig } from "../gameCtx";
 import { backgroundLoop, generateScenePieces } from "../utils/background";
+import { generateText } from "../utils/text";
+import { makeEnemy } from "../entities/enemy";
+import { EnemySprites } from "../constans";
 
 export default function game() {
   kplay.setGravity(4600);
@@ -24,10 +25,16 @@ export default function game() {
   let score = 0;
   let scoreMultiplier = 0;
 
-  const scoreText = kplay.add([
-    kplay.text("SCORE : 0", { font: Fonts.MANIA, size: 72 }),
-    kplay.pos(20, 20),
-  ]);
+  const scoreText = generateText(
+    "SCORE : 0",
+    72,
+    [255, 217, 61],
+    {
+      x: 20,
+      y: 50,
+    },
+    "left"
+  );
 
   const afmirez = makeAfmirez(kplay.vec2(200, 750));
   afmirez.setControls();
@@ -66,9 +73,9 @@ export default function game() {
       return;
     }
 
-    // kplay.play(Sounds.HURT, { volume: 0.5 });
-    // kplay.setData("current-score", score);
-    // kplay.go("gameover", citySfx);
+    kplay.play(Sounds.HURT, { volume: 0.5 });
+    kplay.setData("current-score", score);
+    kplay.go("gameover", citySfx);
   });
 
   let gameSpeed = 300;
@@ -93,6 +100,29 @@ export default function game() {
   };
 
   spawnRecruiterZombie();
+
+  const spawnEnemy = () => {
+    const spriteName =
+      EnemySprites[Math.floor(kplay.rand(0, EnemySprites.length))];
+
+    const enemy = makeEnemy(spriteName, kplay.vec2(1950, 725));
+    enemy.onUpdate(() => {
+      if (gameSpeed < 3000) {
+        enemy.move(-(gameSpeed + 300), 0);
+        return;
+      }
+
+      enemy.move(-gameSpeed, 0);
+    });
+
+    enemy.onExitScreen(() => {
+      if (enemy.pos.x < 0) kplay.destroy(enemy);
+    });
+    const waitTime = kplay.rand(0.5, 2.5);
+    kplay.wait(waitTime, spawnEnemy);
+  };
+
+  spawnEnemy();
 
   const spawnRing = () => {
     const ring = makeRing(kplay.vec2(1950, 745));

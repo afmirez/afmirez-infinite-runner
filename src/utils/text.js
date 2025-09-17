@@ -8,7 +8,7 @@ export function generateText(
   position,
   anchor = "center"
 ) {
-  kplay.add([
+  return kplay.add([
     kplay.text(message, {
       font: Fonts.MANIA,
       size: size,

@@ -7,3 +7,9 @@ export const Sprites = Object.freeze({
   PIZZA: "pizza",
   BUILDING: "building",
 });
+
+export const EnemySprites = [
+  Sprites.RECRUITER,
+  Sprites.PIZZA,
+  Sprites.BUILDING,
+];
