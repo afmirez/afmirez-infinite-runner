@@ -6,6 +6,12 @@ export let SceneConfig = {
   platformYposition: 450,
 };
 
+export let GameSpeed = -1000;
+
 export function updateSceneConfig(newSceneConfig) {
   SceneConfig = { ...SceneConfig, ...newSceneConfig };
+}
+
+export function updateGameSpeed(newGameSpped) {
+  GameSpeed = newGameSpped;
 }

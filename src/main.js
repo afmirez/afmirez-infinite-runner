@@ -35,14 +35,14 @@ kplay.loadSprite(Sprites.PIZZA, "graphics/zombie-pizza.png", {
   sliceX: 3,
   sliceY: 1,
   anims: {
-    run: { from: 0, to: 2, loop: true, speed: 30 },
+    run: { from: 0, to: 2, loop: true, speed: 10 },
   },
 });
 kplay.loadSprite(Sprites.BUILDING, "graphics/zombie-building.png", {
   sliceX: 3,
   sliceY: 1,
   anims: {
-    run: { from: 0, to: 2, loop: true, speed: 30 },
+    run: { from: 0, to: 2, loop: true, speed: 10 },
   },
 });
 

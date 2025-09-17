@@ -1,6 +1,6 @@
 import kplay from "../kaplayCtx";
 import { Sprites } from "../constans";
-import { SceneConfig } from "../gameCtx";
+import { SceneConfig, GameSpeed } from "../gameCtx";
 
 export function generateScenePieces() {
   const backgroundPieces = [
@@ -85,7 +85,7 @@ export function backgroundLoop(
     platforms.push(platforms.shift());
   }
 
-  platforms[0].move(-1000, 0);
+  platforms[0].move(jumpYReference ? -GameSpeed : GameSpeed, 0);
   platforms[1].moveTo(
     platforms[0].pos.x +
       SceneConfig.platformPieceWidth * SceneConfig.platformPieceScale,

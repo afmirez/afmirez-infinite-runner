@@ -2,8 +2,7 @@ import kplay from "../kaplayCtx";
 import { makeAfmirez } from "../entities/afmirez";
 import { makeRing } from "../entities/ring";
 import { Sounds } from "../constans/sounds";
-import { makeRecruiterZombie } from "../entities/recruiter";
-import { updateSceneConfig } from "../gameCtx";
+import { GameSpeed, updateSceneConfig, updateGameSpeed } from "../gameCtx";
 import { backgroundLoop, generateScenePieces } from "../utils/background";
 import { generateText } from "../utils/text";
 import { makeEnemy } from "../entities/enemy";
@@ -51,7 +50,7 @@ export default function game() {
     });
   });
 
-  afmirez.onCollide("recruiter", (enemy) => {
+  afmirez.onCollide("enemy", (enemy) => {
     if (!afmirez.isGrounded()) {
       kplay.play(Sounds.DESTROY, { volume: 0.5 });
       kplay.play(Sounds.HYPER_RING, { volume: 0.5 });
@@ -78,28 +77,8 @@ export default function game() {
     kplay.go("gameover", citySfx);
   });
 
-  let gameSpeed = 300;
-
-  const spawnRecruiterZombie = () => {
-    const recruiter = makeRecruiterZombie(kplay.vec2(1950, 725));
-    recruiter.onUpdate(() => {
-      if (gameSpeed < 3000) {
-        recruiter.move(-(gameSpeed + 300), 0);
-        return;
-      }
-
-      recruiter.move(-gameSpeed, 0);
-    });
-
-    recruiter.onExitScreen(() => {
-      if (recruiter.pos.x < 0) kplay.destroy(recruiter);
-    });
-
-    const waitTime = kplay.rand(0.5, 2.5);
-    kplay.wait(waitTime, spawnRecruiterZombie);
-  };
-
-  spawnRecruiterZombie();
+  // let gameSpeed = 300;
+  updateGameSpeed(300);
 
   const spawnEnemy = () => {
     const spriteName =
@@ -107,12 +86,12 @@ export default function game() {
 
     const enemy = makeEnemy(spriteName, kplay.vec2(1950, 725));
     enemy.onUpdate(() => {
-      if (gameSpeed < 3000) {
-        enemy.move(-(gameSpeed + 300), 0);
+      if (GameSpeed < 3000) {
+        enemy.move(-(GameSpeed + 300), 0);
         return;
       }
 
-      enemy.move(-gameSpeed, 0);
+      enemy.move(-GameSpeed, 0);
     });
 
     enemy.onExitScreen(() => {
@@ -127,7 +106,7 @@ export default function game() {
   const spawnRing = () => {
     const ring = makeRing(kplay.vec2(1950, 745));
     ring.onUpdate(() => {
-      ring.move(-gameSpeed, 0);
+      ring.move(-GameSpeed, 0);
     });
     ring.onExitScreen(() => {
       if (ring.pos.x < 0) kplay.destroy(ring);
@@ -141,7 +120,7 @@ export default function game() {
   spawnRing();
 
   kplay.loop(1, () => {
-    gameSpeed += 50;
+    updateGameSpeed(GameSpeed + 50);
   });
 
   kplay.add([

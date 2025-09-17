@@ -8,7 +8,7 @@ export function makeEnemy(spriteName, pos) {
     kplay.anchor("center"),
     kplay.pos(pos),
     kplay.offscreen(),
-    // this is a tag
-    spriteName,
+    "enemy",
+    spriteName, // We use the Sprite Name as a tag
   ]);
 }
