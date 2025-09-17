@@ -5,42 +5,21 @@ import { Sounds } from "../constans/sounds";
 import { Fonts } from "../constans/fonts";
 import { makeRecruiterZombie } from "../entities/recruiter";
 import { Sprites } from "../constans/sprites";
+import { updateSceneConfig } from "../gameCtx";
+import { backgroundLoop, generateScenePieces } from "../utils/background";
 
 export default function game() {
-  kplay.setGravity(3100);
+  kplay.setGravity(4600);
+
   const citySfx = kplay.play(Sounds.CITY, { volume: 0.2, loop: true });
 
-  const bgPieceWidth = 1920;
+  updateSceneConfig({
+    backgroundPieceScale: 1.3,
+    platformPieceScale: 4.2,
+    platformYposition: 410,
+  });
 
-  const backgroundPieces = [
-    // ver si hay que cambiar el scale
-    kplay.add(
-      [kplay.sprite(Sprites.CR_BACKGROUND), kplay.pos(0, 0), kplay.scale(1.5)],
-      kplay.opacity(1)
-    ),
-    kplay.add(
-      [
-        kplay.sprite(Sprites.CR_BACKGROUND),
-        kplay.pos(bgPieceWidth * 1.2, 0),
-        kplay.scale(1.5),
-      ],
-      kplay.opacity(1)
-    ),
-  ];
-
-  const plaformWidth = 1280;
-  const platforms = [
-    kplay.add([
-      kplay.sprite(Sprites.PLATFORMS),
-      kplay.pos(0, 415),
-      kplay.scale(4.2),
-    ]),
-    kplay.add([
-      kplay.sprite(Sprites.PLATFORMS),
-      kplay.pos(0, 415),
-      kplay.scale(4.2),
-    ]),
-  ];
+  const { backgroundPieces, platforms } = generateScenePieces();
 
   let score = 0;
   let scoreMultiplier = 0;
@@ -87,9 +66,9 @@ export default function game() {
       return;
     }
 
-    kplay.play(Sounds.HURT, { volume: 0.5 });
-    kplay.setData("current-score", score);
-    kplay.go("gameover", citySfx);
+    // kplay.play(Sounds.HURT, { volume: 0.5 });
+    // kplay.setData("current-score", score);
+    // kplay.go("gameover", citySfx);
   });
 
   let gameSpeed = 300;
@@ -145,37 +124,6 @@ export default function game() {
 
   kplay.onUpdate(() => {
     if (afmirez.isGrounded()) scoreMultiplier = 0;
-
-    if (backgroundPieces[1].pos.x < 0) {
-      backgroundPieces[0].moveTo(
-        backgroundPieces[1].pos.x + bgPieceWidth * 1.5,
-        0
-      );
-      backgroundPieces.push(backgroundPieces.shift());
-    }
-
-    backgroundPieces[0].move(-100, 0);
-    backgroundPieces[1].moveTo(
-      backgroundPieces[0].pos.x + bgPieceWidth * 1.5,
-      0
-    );
-
-    // for jump effect
-    backgroundPieces[0].moveTo(
-      backgroundPieces[0].pos.x,
-      -afmirez.pos.y / 10 - 50
-    );
-    backgroundPieces[1].moveTo(
-      backgroundPieces[1].pos.x,
-      -afmirez.pos.y / 10 - 50
-    );
-
-    if (platforms[1].pos.x < 0) {
-      platforms[0].moveTo(platforms[1].pos.x + plaformWidth * 4, 415);
-      platforms.push(platforms.shift());
-    }
-
-    platforms[0].move(-gameSpeed, 0);
-    platforms[1].moveTo(platforms[0].pos.x + plaformWidth * 4, 415);
+    backgroundLoop(backgroundPieces, platforms, -afmirez.pos.y);
   });
 }
