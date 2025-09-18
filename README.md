@@ -21,7 +21,7 @@ What I do value: **respect, learning, remote work, collaboration, and real growt
 ## 🚀 Run locally
 
 ```bash
-pnpm install   # or npm install
-pnpm dev       # start dev server
-pnpm build     # production build in /dist
+npm install  
+npm dev      
+npm build    
 ```
