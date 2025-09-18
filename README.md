@@ -17,7 +17,6 @@ What I do value: **respect, learning, remote work, collaboration, and real growt
 ## 🕹 Controls
 
 - **Jump:** `Space / ↑ / W / Tap`
-- **Restart:** `R`
 
 ## 🚀 Run locally
 
