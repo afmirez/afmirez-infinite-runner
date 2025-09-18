@@ -6,12 +6,17 @@ import { GameSpeed, updateSceneConfig, updateGameSpeed } from "../gameCtx";
 import { backgroundLoop, generateScenePieces } from "../utils/background";
 import { generateText } from "../utils/text";
 import { makeEnemy } from "../entities/enemy";
-import { EnemySprites } from "../constans";
+import { EnemySprites, Colors, Scenes } from "../constans";
 
 export default function game() {
   kplay.setGravity(4600);
 
-  const citySfx = kplay.play(Sounds.CITY, { volume: 0.2, loop: true });
+  const gameoverCtx = {
+    citySfx: kplay.play(Sounds.CITY, { volume: 0.2, loop: true }),
+    enemy: null,
+  };
+
+  // const citySfx = kplay.play(Sounds.CITY, { volume: 0.2, loop: true });
 
   updateSceneConfig({
     backgroundPieceScale: 1.3,
@@ -27,7 +32,7 @@ export default function game() {
   const scoreText = generateText(
     "SCORE : 0",
     72,
-    [255, 217, 61],
+    Colors.YELLOW,
     {
       x: 20,
       y: 50,
@@ -74,10 +79,10 @@ export default function game() {
 
     kplay.play(Sounds.HURT, { volume: 0.5 });
     kplay.setData("current-score", score);
-    kplay.go("gameover", citySfx);
+    gameoverCtx.enemy = enemy.enemyType;
+    kplay.go(Scenes.GAMEOVER, gameoverCtx);
   });
 
-  // let gameSpeed = 300;
   updateGameSpeed(300);
 
   const spawnEnemy = () => {

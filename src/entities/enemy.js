@@ -9,6 +9,8 @@ export function makeEnemy(spriteName, pos) {
     kplay.pos(pos),
     kplay.offscreen(),
     "enemy",
-    spriteName, // We use the Sprite Name as a tag
+    {
+      enemyType: spriteName,
+    },
   ]);
 }

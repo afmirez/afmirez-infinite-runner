@@ -6,12 +6,16 @@ export function generateText(
   size,
   color,
   position,
-  anchor = "center"
+  anchor = "center",
+  width = null,
+  align = null
 ) {
   return kplay.add([
     kplay.text(message, {
       font: Fonts.MANIA,
       size: size,
+      width: width,
+      align: align,
     }),
     kplay.color(color),
     kplay.pos(position.x, position.y),
